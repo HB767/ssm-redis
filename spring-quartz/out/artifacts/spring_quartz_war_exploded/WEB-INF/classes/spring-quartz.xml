@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+        <context:component-scan base-package="com.ht"></context:component-scan>
+        <bean id="bbJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+                <property name="name" value="bbJob"></property>
+                <property name="group" value="bbGroup"></property>
+                <property name="jobClass" value="com.ht.job.BbJob"></property>
+                <property name="durability" value="true"></property>
+        </bean>
+
+        <bean id="bbTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+                <property name="name" value="bbTrigger"></property>
+                <property name="group" value="bbGroup"></property>
+                <property name="cronExpression" value="0/5 * * * * ? *"></property>
+                <property name="jobDetail" ref="bbJobDetail"></property>
+        </bean>
+
+        <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+                <property name="jobDetails">
+                        <list>
+                                <ref bean="bbJobDetail"></ref>
+                        </list>
+                </property>
+                <property name="triggers">
+                        <list>
+                                <ref bean="bbTrigger"></ref>
+                        </list>
+                </property>
+        </bean>
+</beans>
